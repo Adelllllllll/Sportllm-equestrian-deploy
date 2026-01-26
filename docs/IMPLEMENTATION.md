@@ -84,13 +84,6 @@ def execute_query(graph, query):
    - Assembles everything into LangChain's `GraphCypherQAChain`
    - Returns ready-to-use question-answering pipeline
 
-4. **Conversational Invocation** (`invoke_with_memory()`):
-   - Handles greeting removal ("Bonjour", "Salut", etc.)
-   - Responds to system description queries ("qui es-tu?", "explique ce système")
-   - Integrates with memory service for context management
-   - Enriches questions with conversational context
-   - Catches and handles SUM() errors gracefully with user-friendly messages
-   - Updates conversation memory after each interaction
 
 **Example Pipeline Flow**:
 ```
@@ -101,63 +94,6 @@ User Question → Cypher Prompt + LLM → Cypher Query → Execute on Neo4j
 **Why it matters**: This is the most critical file in the system. It implements the core GraphRAG logic that enables accurate question-answering over the knowledge graph.
 
 **Location**: `backend/llm_service.py`
-
----
-
-### memory_service.py - Conversational Memory Management
-
-**Purpose**: Maintains conversation context for follow-up questions and pronoun resolution.
-
-**What it does**:
-- **Entity Tracking**: Monitors mentioned horses, riders, events, sensors, and training stages
-- **Subject History**: Maintains history of last 3 discussed subjects with timestamps
-- **Pronoun Resolution**: Resolves pronouns ("il", "elle", "son", "sa", "ses") to specific entities
-- **Question Enrichment**: Expands questions like "Et son cavalier?" to "Quel est le cavalier de Dakota?"
-- **Context Management**: Tracks conversation flow for coherent multi-turn dialogues
-- **Message Processing**: Extracts entities from both user questions and assistant responses
-
-**Core Components**:
-
-```python
-class ConversationMemory:
-    """Stores conversation state"""
-    entities: Dict[str, List[str]]      # Mentioned entities by type
-    subject_history: List[Dict]          # Last 3 discussed subjects
-    last_subject: Dict[str, str]         # Most recent entity (for pronouns)
-    recent_questions: List[str]          # Last 5 questions
-
-class MemoryService:
-    """Manages conversation memory"""
-    def load_from_messages(messages)     # Load from chat history
-    def enrich_question_with_context()   # Resolve pronouns
-    def should_ask_clarification()       # Detect ambiguity
-    def _process_user_message()          # Extract from questions
-    def _process_assistant_message()     # Extract from answers
-```
-
-**Key Features**:
-- Bidirectional entity extraction (from both questions and answers)
-- Pronoun pattern detection using regex (excludes articles like "la", "le", "les")
-- Subject history with 3-entity buffer
-- Context-aware question enrichment
-
-**Example Usage**:
-```
-User: "Parle-moi de Dakota"
-Memory: Tracks Dakota as last_subject (type: horse, name: Dakota)
-
-User: "Quelle est sa race?"
-Memory: Detects "sa" pronoun
-Enriched: "Quelle est la race de Dakota?"
-
-User: "Et son cavalier?"
-Memory: Detects "Et" continuation + "son" pronoun
-Enriched: "Quel est le cavalier de Dakota?"
-```
-
-**Why it matters**: Enables natural conversational flow without requiring users to repeat entity names in every question. Critical for multi-turn conversations.
-
-**Location**: `backend/memory_service.py`
 
 ---
 
@@ -468,8 +404,6 @@ def get_value(obj):
 ```
 User Input (frontend/app.py)
          ↓
-Memory Service (backend/memory_service.py)
-         ↓
 LLM Service (backend/llm_service.py)
          ↓
 Graph Service (backend/graph_service.py)
@@ -520,7 +454,6 @@ Python dependencies with pinned versions for reproducibility
 ## Performance Considerations
 
 - **Caching**: Streamlit caches `init_graph_chain()` to avoid reinitialization
-- **Memory**: Conversation history loads only when needed
 - **API Calls**: Evaluation caches embeddings between runs
 - **Database**: Indexes on key properties for fast lookups
 
