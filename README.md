@@ -12,10 +12,9 @@ SportLLM is an intelligent chatbot that enables natural French language queries 
 - Natural language querying in French
 - GraphRAG architecture for accurate, grounded responses
 - Knowledge graph with 2 horses, 3 disciplines, 4 sensors, and comprehensive training data
-- 91.8% overall accuracy, 100% success rate on 40 test questions
-- Real-time conversation memory for context-aware follow-up questions
+- 91.8% overall accuracy, 88% success rate on 40 test questions
 - Performance analytics dashboard
-- News aggregation from equestrian sources
+- News summary from equestrian sources
 
 **Technology Stack:**
 - Backend: Python, LangChain, Neo4j
@@ -100,15 +99,6 @@ Answer: "Dakota a 4 capteurs IMU attachés: au garrot, au sternum,
          au canon antérieur et au canon postérieur."
 ```
 
-### Follow-up Questions (Memory)
-```
-User: "Parle-moi de Dakota"
-Assistant: "Dakota est un Selle Français avec une intensité d'entraînement élevée..."
-
-User: "Quelle est sa race ?"
-Assistant: "Selle Français." (remembers we're talking about Dakota)
-```
-
 ## Project Structure
 
 ```
@@ -118,7 +108,6 @@ sportllm-equestrian/
 │   ├── config.py              # Configuration management
 │   ├── graph_service.py       # Neo4j operations
 │   ├── llm_service.py         # GraphRAG pipeline (CORE)
-│   ├── memory_service.py      # Conversation memory 
 │   ├── evaluation_service.py  # Quality assessment
 │   └── news_service.py        # News summary 
 │
@@ -198,13 +187,6 @@ Neo4j connection initialization, graph schema refresh, Cypher query execution
 - Greeting handling and system description
 - Error management for SUM() operations on strings
 
-### memory_service.py (NEW)
-- Conversational context management
-- Entity tracking (horses, riders, events)
-- Pronoun resolution ("il", "elle", "son", "sa")
-- Subject history (last 3 discussed entities)
-- Question enrichment for follow-ups
-
 ### evaluation_service.py
 Semantic similarity calculation, LLM-as-judge evaluation, embedding-based comparison
 
@@ -261,7 +243,6 @@ Results are saved to `evaluation_results/` with detailed metrics.
 
 ### Core Chatbot
 - Natural language understanding in French
-- Context-aware responses using conversation memory
 - Accurate query translation (Cypher generation)
 - Grounded answers (no hallucination)
 - Technical query inspection
@@ -293,29 +274,15 @@ Navigate to "News" page for:
 2. Re-run database setup: `python scripts/setup_database.py`
 3. Update Cypher prompt with new schema details
 
-### Memory System
-
-The conversation memory system (`backend/memory_service.py`) handles:
-- Entity tracking (horses, riders, events)
-- Pronoun resolution ("sa race" → "la race de Dakota")
-- Subject history (last 3 discussed entities)
-- Follow-up question enrichment
-
 ## Configuration
 
 ### Neo4j Setup
 
-**Option 1: Local Installation**
+**Local Installation**
 ```bash
 # Download from https://neo4j.com/download/
 # Start Neo4j
 # Access browser at http://localhost:7474
-```
-
-**Option 2: Neo4j Aura (Cloud)**
-```bash
-# Create free instance at https://neo4j.com/aura/
-# Copy connection URI and credentials to .env
 ```
 
 ### OpenAI API
@@ -326,32 +293,6 @@ Get your API key from https://platform.openai.com/api-keys
 - Average cost per question: ~$0.003-0.005 USD
 - 100 questions ≈ $0.30-0.50 USD
 
-## Troubleshooting
-
-### Common Issues
-
-**Neo4j Connection Error:**
-```
-Error: Failed to connect to Neo4j
-```
-- Verify Neo4j is running
-- Check credentials in `.env`
-- Test connection: `bolt://localhost:7687`
-
-**OpenAI API Error:**
-```
-Error: Invalid API key
-```
-- Verify API key in `.env`
-- Check account has credits
-- Confirm key has proper permissions
-
-**Import Error:**
-```
-ModuleNotFoundError: No module named 'langchain'
-```
-- Reinstall dependencies: `pip install -r requirements.txt`
-- Use Python 3.9+
 
 ## Documentation
 
@@ -375,9 +316,7 @@ This project is part of academic research conducted at efrei research Lab in par
 - LangChain and Neo4j communities for excellent tools
 
 
-
-
 **Version:** 1.0.0  
 **Last Updated:** January 2025  
 **Status:** Active Development
-s
+
