@@ -449,12 +449,5 @@ Python dependencies with pinned versions for reproducibility
 2. Run: `python scripts/setup_database.py`
 3. Update prompts with new entity types and relationships
 
----
-
-## Performance Considerations
-
-- **Caching**: Streamlit caches `init_graph_chain()` to avoid reinitialization
-- **API Calls**: Evaluation caches embeddings between runs
-- **Database**: Indexes on key properties for fast lookups
 
 
