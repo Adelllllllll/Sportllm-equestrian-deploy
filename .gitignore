@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+venv/
+env/
+.venv
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Data
+data/conversations/*.json
+!data/conversations/.gitkeep
+
+# Results
+evaluation_results/*.json
+!evaluation_results/.gitkeep
+
+# Logs
+*.log
+
+# Neo4j
+.neo4j/
+
+# Streamlit
+.streamlit/secrets.toml

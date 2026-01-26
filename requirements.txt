@@ -1,0 +1,32 @@
+# Core Web Framework
+streamlit
+# LangChain Ecosystem
+langchain
+langchain-openai
+langchain-community
+langchain-core
+
+# OpenAI Integration
+openai
+
+# Neo4j Database
+neo4j
+
+# RDF/Semantic Web
+rdflib
+
+# Environment Variables
+python-dotenv
+
+# Data Visualization (for Analytics page)
+plotly
+
+# HTTP Requests (for News service)
+requests
+feedparser
+beautifulsoup4
+
+# Utilities
+numpy
+pandas
+
