@@ -11,16 +11,19 @@ def get_config_value(key, default=None):
     """
     Récupère une configuration depuis streamlit secrets ou variables d'environnement.
     """
+    # 1. On essaie de récupérer via Streamlit (utile pour le Cloud)
     try:
         import streamlit as st
-        # On vérifie si la clé existe dans st.secrets
-        if key in st.secrets:
-            return st.secrets[key]
-    except ImportError:
-        # Streamlit n'est pas installé ou utilisé dans ce contexte
+        # On utilise .get() sur st.secrets pour éviter de lever l'exception
+        # si le fichier secrets.toml n'existe pas.
+        val = st.secrets.get(key)
+        if val is not None:
+            return val
+    except Exception:
+        # On ignore silencieusement les erreurs Streamlit en local
         pass
     
-    # Fallback sur les variables d'environnement classiques (.env ou système)
+    # 2. Fallback sur le .env local (via os.getenv)
     return os.getenv(key, default)
 
 # Neo4j Configuration

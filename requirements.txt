@@ -1,5 +1,6 @@
 # Core Web Framework
 streamlit
+
 # LangChain Ecosystem
 langchain
 langchain-openai
@@ -9,8 +10,8 @@ langchain-core
 # OpenAI Integration
 openai
 
-# Neo4j Database
-neo4j
+# Neo4j Database (Version stable validée ensemble)
+neo4j==5.28.0
 
 # RDF/Semantic Web
 rdflib
@@ -18,15 +19,15 @@ rdflib
 # Environment Variables
 python-dotenv
 
-# Data Visualization (for Analytics page)
+# Data Visualization
 plotly
 
-# HTTP Requests (for News service)
+# HTTP Requests
 requests
 feedparser
 beautifulsoup4
 
-# Utilities
-numpy
-pandas
-
+# --- SÉCURITÉ CLOUD (INDISPENSABLE) ---
+# On force NumPy 1.x pour éviter le crash "Array API" sur le Cloud
+numpy==1.26.4
+pandas>=2.0.0
